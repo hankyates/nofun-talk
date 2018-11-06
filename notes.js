@@ -78,7 +78,7 @@ let createReports = _.pipe(
   _.zipObject(reportLabels),
 )
 
-let output = lastDayGross
+let output = createReports
 
 console.log(JSON.stringify(
   output(transactions)
