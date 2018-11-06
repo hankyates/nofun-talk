@@ -1,7 +1,7 @@
 let _ = require('lodash/fp')
 
 let now = () => parseInt(new Date(new Date().toUTCString()).getTime() / 1000)
-let dayAgo = () => now() - (24 * 60 * 60)
+let daysAgo = (n = 1) => now() - (n * 24 * 60 * 60)
 
 let transactions = [
   {
@@ -64,12 +64,19 @@ let convertBuys = _.pipe(
 
 let sumTransactions = _.pipe(convertBuys, sumPrice)
 
-let lastDay = _.pipe(
+let last = (n) => _.pipe(
   convertBuys,
-  _.filter(t => dayAgo() < t.timestamp),
+  _.filter(t => daysAgo(n) < t.timestamp),
 )
-
+let lastDay = last(1)
+let lastWeek = last(7)
 let lastDayGross = _.pipe(lastDay, sumPrice)
+let lastWeekGross = _.pipe(lastWeek, sumPrice)
+const reportLabels = ['lastDayGross', 'lastWeekGross']
+let createReports = _.pipe(
+  _.over([lastDayGross, lastWeekGross]),
+  _.zipObject(reportLabels),
+)
 
 let output = lastDayGross
 
