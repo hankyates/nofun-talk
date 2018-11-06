@@ -66,7 +66,7 @@ let sumTransactions = _.pipe(convertBuys, sumPrice)
 
 let last = (n) => _.pipe(
   convertBuys,
-  _.filter(t => daysAgo(n) < t.timestamp),
+  _.filter(t => daysAgo(n) > t.timestamp),
 )
 let lastDay = last(1)
 let lastWeek = last(7)
